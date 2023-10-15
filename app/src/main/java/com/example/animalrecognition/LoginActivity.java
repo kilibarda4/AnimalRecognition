@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;

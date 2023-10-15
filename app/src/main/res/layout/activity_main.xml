@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="18dp"
-    android:background="#F6C634"
+    android:background="#FFCC00"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign up"
-        android:textColor="@color/black"
+        android:textColor="#FFFFCC"
         android:textSize="58dp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
@@ -58,7 +58,8 @@
         android:id="@+id/signup"
         android:text="Register"
         android:textSize="28dp"
-        android:backgroundTint="@color/black"
+        android:textColor="#FFCC00"
+        android:backgroundTint="#FFFFCC"
         android:layout_marginBottom="38dp"/>
 
     <Button
