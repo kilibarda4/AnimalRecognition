@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFCC"
+    tools:context=".HomeActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="100dp"
+        android:text="Animal Know"
+        android:textAlignment="center"
+        android:textColor="#FFCC00"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/startRecordingBtn"
+        android:text="RECORD"
+        android:textSize="28sp"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#FFCC00"
+        android:layout_marginTop="100dp"/>
+    <Button
+        android:id="@+id/stopRecordingBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Recording"
+        android:textSize="22sp"
+        android:textColor="#FFFFCC"
+        android:layout_below="@+id/startRecordingBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#FFCC00"/>
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Result : "
+        android:textSize="20sp"
+        android:textColor="#FFCC00"
+        android:textAlignment="center"
+        android:layout_below="@id/stopRecordingBtn"
+        android:layout_marginTop="30dp"/>
+
+</RelativeLayout>
