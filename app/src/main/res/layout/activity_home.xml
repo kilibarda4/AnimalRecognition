@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="100dp"
-        android:text="Animal Know"
+        android:text="@string/animal_know"
         android:textAlignment="center"
         android:textColor="#FFCC00"
         android:textSize="35sp"
@@ -20,19 +20,20 @@
 
     <Button
         android:id="@+id/startRecordingBtn"
-        android:text="RECORD"
-        android:textSize="28sp"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_below="@+id/title"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
         android:backgroundTint="#FFCC00"
-        android:layout_marginTop="100dp"/>
+        android:text="@string/record"
+        android:textSize="28sp" />
+
     <Button
         android:id="@+id/stopRecordingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop Recording"
+        android:text="@string/stop_recording"
         android:textSize="22sp"
         android:textColor="#FFFFCC"
         android:layout_below="@+id/startRecordingBtn"
@@ -44,11 +45,21 @@
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="Result : "
+        android:text="@string/result"
         android:textSize="20sp"
         android:textColor="#FFCC00"
         android:textAlignment="center"
         android:layout_below="@id/stopRecordingBtn"
         android:layout_marginTop="30dp"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="#FFFFFF"
+        android:background="#FFCC00"
+        app:itemIconSize="36dp"
+        app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>
