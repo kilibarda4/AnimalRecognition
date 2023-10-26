@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText username, password;
-    Button login;
+    EditText username1, password1;
+    Button login1, signup1;
     DBHelper DB;
 
     @Override
@@ -23,16 +23,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = findViewById(R.id.username1);
-        password = findViewById(R.id.password1);
-        login    = findViewById(R.id.login1);
+        username1 = findViewById(R.id.username1);
+        password1 = findViewById(R.id.password1);
+        login1   = findViewById(R.id.login1);
+        signup1  = findViewById(R.id.signup1);
         DB       = new DBHelper(this);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        login1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String user = username.getText().toString();
-                String pass = password.getText().toString();
+                String user = username1.getText().toString();
+                String pass = password1.getText().toString();
 
                 if(TextUtils.isEmpty(user) || TextUtils.isEmpty(pass)) {
                     Toast.makeText(LoginActivity.this, "All fields Required", Toast.LENGTH_SHORT).show();
@@ -47,6 +48,14 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        signup1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 

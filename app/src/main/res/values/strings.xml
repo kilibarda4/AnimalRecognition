@@ -1,4 +1,29 @@
 <resources>
     <string name="app_name">Animal Recognition</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="stats">Stats</string>
+    <string name="profile">Profile</string>
+    <string name="home">Home</string>
+    <string name="sign_up">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="already_have_an_account">Already have an account</string>
+    <string name="animal_know">Animal Know</string>
+    <string name="record">RECORD</string>
+    <string name="stop_recording">Stop Recording</string>
+    <string name="result">Result :</string>
+    <string name="log_in">Log in</string>
+    <string name="username1">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="log_in1">Log in</string>
+    <string name="create_account">Create Account</string>
+    <string name="info">Info</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="info_view_deletable">INFO VIEW</string>
+    <string name="profile_view_deletable">PROFILE VIEW</string>
+    <string name="stats_view_deletable">STATS VIEW</string>
+    <string name="home_fragment_delete">HOME FRAGMENT</string>
 </resources>
