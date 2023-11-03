@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "914797897119",
+    "project_id": "animalisten-c54fa",
+    "storage_bucket": "animalisten-c54fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914797897119:android:e93ef975fc6df655d209aa",
+        "android_client_info": {
+          "package_name": "com.example.animalrecognition"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS1YwFqf5M4dZ1GrLYszfYBOoPIsyLuOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
