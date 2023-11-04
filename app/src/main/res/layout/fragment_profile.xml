@@ -13,4 +13,14 @@
         android:textSize="26sp"
         android:text="@string/profile_view_deletable" />
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFDA49"
+        android:backgroundTint="@color/black"
+        android:text="@string/sign_out"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="20dp" />
+
 </FrameLayout>

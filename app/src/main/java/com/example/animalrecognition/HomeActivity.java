@@ -7,11 +7,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.animalrecognition.databinding.ActivityHomeBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Firebase;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -19,12 +23,23 @@ public class HomeActivity extends AppCompatActivity {
     TextView result;
     BottomNavigationView bottomNavigationView;
     ActivityHomeBinding binding;
+    private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //initialize firebase for the project
+        FirebaseApp.initializeApp(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        //initialize buttons
+        startRecordingBtn = findViewById(R.id.startRecordingBtn);
+        stopRecordingBtn = findViewById(R.id.stopRecordingBtn);
+        result   = findViewById(R.id.result);
+
+        //navigate using the nav bar
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if(id == R.id.navigation_home) {
@@ -42,6 +57,10 @@ public class HomeActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        Bundle params = new Bundle();
+        params.putString("startRCD", "startRecordingButton");
+        startRecordingBtn.setOnClickListener(view -> mFirebaseAnalytics.logEvent("record_button_click", params));
 
         binding.bottomNavigationView.setBackground(null);
     }

@@ -7,7 +7,7 @@
     android:padding="18dp"
     android:background="#FFCC00"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".RegistrationActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -22,43 +22,43 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:id="@+id/username"
-        android:inputType="text"
-        android:hint="@string/username"
+        android:id="@+id/emailRegister"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email"
         android:textSize="25sp"
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingLeft="28dp"/>
+        android:paddingStart="28dp" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:id="@+id/password"
+        android:id="@+id/passwordRegister"
         android:inputType="textPassword"
         android:hint="@string/password"
         android:textSize="25sp"
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingLeft="28dp"/>
+        android:paddingStart="28dp"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:id="@+id/repassword"
+        android:id="@+id/retypePassword"
         android:inputType="textPassword"
         android:hint="@string/confirm_password"
         android:textSize="25sp"
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingLeft="28dp"/>
+        android:paddingStart="28dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:id="@+id/signup"
+        android:id="@+id/buttonRegister"
         android:text="@string/register"
         android:textSize="28sp"
         android:textColor="#FFCC00"
@@ -68,7 +68,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:id="@+id/login"
+        android:id="@+id/goToLogin"
         android:text="@string/already_have_an_account"
         android:textSize="18sp"
         android:textColor="@color/black"

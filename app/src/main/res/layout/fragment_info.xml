@@ -6,12 +6,21 @@
     android:background="#FFFFCC"
     tools:context=".InfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="26sp"
-        android:text="@string/info_view_deletable" />
+        android:layout_gravity="center|top"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:text="@string/model_info" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:textAlignment="center"
+        android:layout_marginBottom="50dp"
+        android:text="@string/model_webpage"
+        android:contextClickable="true" />
 
 </FrameLayout>

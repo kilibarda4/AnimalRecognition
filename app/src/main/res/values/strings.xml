@@ -18,7 +18,7 @@
     <string name="username1">Username</string>
     <string name="password_hint">Password</string>
     <string name="log_in1">Log in</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Create new account</string>
     <string name="info">Info</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -26,4 +26,13 @@
     <string name="profile_view_deletable">PROFILE VIEW</string>
     <string name="stats_view_deletable">STATS VIEW</string>
     <string name="home_fragment_delete">HOME FRAGMENT</string>
+    <string name="model_info">YAMNet Machine Learning Model Information</string>
+    <string name="model_webpage">Click here to view the YAMNet documentation webpage</string>
+    <string name="animalisten">AnimaListen</string>
+    <string name="email">Email</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="confirmLogout">Are you sure you want to sign out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>
