@@ -34,5 +34,5 @@
     <string name="confirmLogout">Are you sure you want to sign out?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password">Reset Password?</string>
 </resources>
