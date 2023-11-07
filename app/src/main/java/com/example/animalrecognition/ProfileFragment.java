@@ -43,11 +43,10 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    private final DocumentReference mDocRef = FirebaseFirestore.getInstance().document("userData/personalInfo");
-
     public ProfileFragment() {
         // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,24 +71,7 @@ public class ProfileFragment extends Fragment {
         disableEditing();
 
         logout.setOnClickListener(v -> {
-//            showLogoutConfirmationDialog();
-            androidx.appcompat.app.AlertDialog dialogBuilder =
-                    new MaterialAlertDialogBuilder(requireContext(),R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                            .setMessage("Are you sure you want to sign out?")
-                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                // Sign out the user from Firebase (if needed)
-                                FirebaseAuth.getInstance().signOut();
-
-                                // Navigate back to the LoginActivity
-                                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            })
-                            .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                                // User clicked No, dismiss the dialog
-                                dialog.dismiss();
-                            })
-                            .show();
+            showLogoutConfirmationDialog();
         });
 
         editInfo.setOnClickListener(view1 -> {
@@ -107,6 +89,8 @@ public class ProfileFragment extends Fragment {
             String id_   = utaID.getText().toString();
             String prof  = profession.getText().toString();
 
+            DocumentReference userDocRef = db.collection("userData").document(userId);
+
             //TODO : SAVE TO FIRESTORE
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put(FIRST_NAME, fName);
@@ -114,16 +98,17 @@ public class ProfileFragment extends Fragment {
             userInfo.put(LAST_NAME, lName);
             userInfo.put(UTA_ID, id_);
             userInfo.put(PROFESSION, prof);
-            mDocRef.set(userInfo)
-                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Document has been saved!"))
+            userDocRef.set(userInfo)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Document has been saved!");
+                        //disable editText editing
+                        disableEditing();
+                        //make the button invisible again
+                        saveChanges.setVisibility(View.GONE);
+                    })
                     .addOnFailureListener(e -> Log.w(TAG, "Document was not saved!", e));
-            //disable editText editing
-            disableEditing();
-            //make the button invisible again
-            saveChanges.setVisibility(View.GONE);
+
         });
-
-
 
         return view;
     }
@@ -134,7 +119,7 @@ private void loadUserDataFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Retrieve user data from Firestore
-        db.collection("users").document(userId)
+        db.collection("userData").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -144,12 +129,15 @@ private void loadUserDataFromFirestore() {
                         String id = documentSnapshot.getString(UTA_ID);
                         String prof = documentSnapshot.getString(PROFESSION);
 
+                        enableEditing();
                         // Set the retrieved data to EditText fields
                         firstName.setText(fName);
                         middleName.setText(mName);
                         lastName.setText(lName);
                         utaID.setText(id);
                         profession.setText(prof);
+
+                        disableEditing();
                     }
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error loading user data from Firestore!", e));
@@ -157,25 +145,23 @@ private void loadUserDataFromFirestore() {
 }
 
     private void showLogoutConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        androidx.appcompat.app.AlertDialog dialogBuilder =
+                new MaterialAlertDialogBuilder(requireContext(),R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog)
+                        .setMessage("Are you sure you want to sign out?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // Sign out the user from Firebase (if needed)
+                            FirebaseAuth.getInstance().signOut();
 
-        builder.setView(inflater.inflate(R.layout.dialog_logout, null))
-                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    // Sign out the user from Firebase (if needed)
-                    FirebaseAuth.getInstance().signOut();
-
-                    // Navigate back to the LoginActivity
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                })
-                .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                    // User clicked No, dismiss the dialog
-                    dialog.dismiss();
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                            // Navigate back to the LoginActivity
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                            // User clicked No, dismiss the dialog
+                            dialog.dismiss();
+                        })
+                        .show();
     }
 
     private void enableEditing() {
