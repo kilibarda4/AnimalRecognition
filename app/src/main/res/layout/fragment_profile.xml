@@ -1,26 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFCC00"
-    tools:context=".ProfileFragment">
+    android:background="#FDD017"
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Circular Profile Picture -->
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/default_profile_picture"
+        android:background="@drawable/circular_background"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp" />
+
+    <!-- First Name EditText -->
+    <EditText
+        android:id="@+id/firstNameEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="26sp"
-        android:text="@string/profile_view_deletable" />
+        android:hint="@string/first_name"
+        android:inputType="textPersonName"
+        android:layout_below="@id/profileImageView"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Middle Name EditText -->
+    <EditText
+        android:id="@+id/middleNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/middle_name"
+        android:inputType="textPersonName"
+        android:layout_below="@id/firstNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Last Name EditText -->
+    <EditText
+        android:id="@+id/lastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName"
+        android:layout_below="@id/middleNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Numerical ID EditText -->
+    <EditText
+        android:id="@+id/idEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/uta_id"
+        android:inputType="number"
+        android:layout_below="@id/lastNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Profession EditText -->
+    <EditText
+        android:id="@+id/professionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/profession"
+        android:inputType="text"
+        android:layout_below="@id/idEditText"
+        android:layout_marginTop="8dp"/>
+
+    <!--    Save changes button-->
 
     <Button
-        android:id="@+id/logout"
+        android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFDA49"
-        android:backgroundTint="@color/black"
-        android:text="@string/sign_out"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="20dp" />
+        android:layout_below="@+id/professionEditText"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:text="@string/save_changes"
+        android:layout_marginTop="16dp"/>
 
-</FrameLayout>
+    <!-- Edit Information Button -->
+    <Button
+        android:id="@+id/editInfoButton"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_information"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:layout_below="@id/saveButton"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Change Password Button -->
+    <Button
+        android:id="@+id/changePasswordButton"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_password"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:layout_below="@id/editInfoButton"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_below="@+id/changePasswordButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:text="@string/sign_out" />
+
+</RelativeLayout>

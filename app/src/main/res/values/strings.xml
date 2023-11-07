@@ -36,4 +36,12 @@
     <string name="no">No</string>
     <string name="forgot_password">Reset Password?</string>
     <string name="emailHint">Email</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="uta_id">UTA ID</string>
+    <string name="profession">Profession</string>
+    <string name="edit_information">Edit Information</string>
+    <string name="change_password">Change Password</string>
+    <string name="save_changes">Save</string>
 </resources>
