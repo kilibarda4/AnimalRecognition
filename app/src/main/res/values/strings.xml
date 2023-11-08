@@ -28,7 +28,7 @@
     <string name="home_fragment_delete">HOME FRAGMENT</string>
     <string name="model_info">YAMNet Machine Learning Model Information</string>
     <string name="model_webpage">Click here to view the YAMNet documentation webpage</string>
-    <string name="animalisten">AnimaListen</string>
+    <string name="animal_recognition">Animal Recognition</string>
     <string name="email">Email</string>
     <string name="sign_out">Sign Out</string>
     <string name="confirmLogout">Are you sure you want to sign out?</string>

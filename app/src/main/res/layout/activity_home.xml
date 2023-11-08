@@ -20,10 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="@string/animalisten"
+            android:text="@string/animal_recognition"
             android:textAlignment="center"
             android:textColor="#FFCC00"
-            android:textSize="45sp"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
         <Button
@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:layout_marginTop="25dp"
             android:text="@string/result"
             android:textColor="#6C5600"
             android:textSize="24sp" />
