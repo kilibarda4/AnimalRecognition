@@ -1,11 +1,21 @@
 package com.example.animalrecognition;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,14 +27,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.Manifest;
+import android.widget.Toast;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,11 +55,23 @@ public class ProfileFragment extends Fragment {
     public static final String LAST_NAME = "last name";
     public static final String UTA_ID = "utaID";
     public static final String PROFESSION = "profession";
+
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+
+    private static final int REQUEST_IMAGE_PICK = 102;
+
+    private String [] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+
     Button logout, editInfo, changePassword, saveChanges;
     ImageView profileImage;
+    private Uri imageUri;
     EditText firstName, middleName, lastName, utaID, profession;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+
+    FirebaseStorage storage;
+
+    StorageReference storageReference;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -64,8 +94,12 @@ public class ProfileFragment extends Fragment {
         saveChanges     = view.findViewById(R.id.saveButton);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null; //unnecessary since only logged in users can be in p_page
+        assert currentUser != null;
         String userId = currentUser.getUid();
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         saveChanges.setVisibility(View.GONE);
         loadUserDataFromFirestore();
 //        disableEditing();
@@ -83,9 +117,53 @@ public class ProfileFragment extends Fragment {
             saveUserDataToFirestore();
         });
 
+        profileImage.setOnClickListener(v -> {
+            choosePicture();
+        });
+
         return view;
     }
-private void loadUserDataFromFirestore() {
+
+    private void choosePicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            profileImage.setImageURI(imageUri);
+            uploadPicture();
+        }
+    }
+
+    private void uploadPicture() {
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
+        String userId = currentUser.getUid();
+        StorageReference profRef = storageReference.child("images/" + userId);
+        profRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "Image uploaded.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Failed to upload.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadUserDataFromFirestore() {
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     if (currentUser != null) {
         String userId = currentUser.getUid();
@@ -172,6 +250,7 @@ private void loadUserDataFromFirestore() {
 
     private void enableEditing() {
         // Enable editing for the EditText fields
+        profileImage.setClickable(true);
         firstName.setEnabled(true);
         middleName.setEnabled(true);
         lastName.setEnabled(true);
@@ -183,6 +262,7 @@ private void loadUserDataFromFirestore() {
     }
     private void disableEditing() {
         //Disable editing for the information fields
+        profileImage.setClickable(false);
         firstName.setEnabled(false);
         middleName.setEnabled(false);
         lastName.setEnabled(false);
