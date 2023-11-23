@@ -11,11 +11,13 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:src="@drawable/default_profile_picture"
         android:background="@drawable/circular_background"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:scaleType="centerCrop" />
+
 
     <EditText
         android:id="@+id/firstNameEditText"

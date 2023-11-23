@@ -5,8 +5,15 @@ import static android.app.Activity.RESULT_OK;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +52,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,9 +66,9 @@ public class ProfileFragment extends Fragment {
     public static final String UTA_ID = "utaID";
     public static final String PROFESSION = "profession";
 
-    private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int REQUEST_CAMERA = 1;
 
-    private static final int REQUEST_IMAGE_PICK = 102;
+    private static final int REQUEST_GALLERY = 2;
 
     private String [] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
@@ -125,21 +135,127 @@ public class ProfileFragment extends Fragment {
     }
 
     private void choosePicture() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
-
+        // Use an AlertDialog to let the user choose between gallery and camera
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Choose Picture Source");
+        builder.setItems(new CharSequence[]{"Gallery", "Camera"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        // Gallery
+                        Intent galleryIntent = new Intent();
+                        galleryIntent.setType("image/*");
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(galleryIntent, REQUEST_GALLERY);
+                        break;
+                    case 1:
+                        // Camera
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (cameraIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                            startActivityForResult(cameraIntent, REQUEST_CAMERA);
+                        } else {
+                            Toast.makeText(getContext(), "Camera not available", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            imageUri = data.getData();
+//            profileImage.setImageURI(imageUri);
+//            uploadPicture();
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            profileImage.setImageURI(imageUri);
-            uploadPicture();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_GALLERY:
+                    if (data != null && data.getData() != null) {
+                        // Get the selected image from gallery
+                        imageUri = data.getData();
+                        Bitmap galleryBitmap = getBitmapFromUri(imageUri);
+
+                        // Crop the bitmap to a circle
+                        Bitmap circularGalleryBitmap = cropToCircle(galleryBitmap);
+
+                        // Set the circular image to your ImageView
+                        profileImage.setImageBitmap(circularGalleryBitmap);
+                        // Apply the circular background to the ImageView
+                        profileImage.setBackgroundResource(R.drawable.circular_background);
+
+                        // Upload the circular image
+                        uploadPicture();
+                    }
+                    break;
+                case REQUEST_CAMERA:
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        // Get the captured image from the camera
+                        Bitmap cameraBitmap = (Bitmap) extras.get("data");
+
+                        // Crop the bitmap to a circle
+                        Bitmap circularCameraBitmap = cropToCircle(cameraBitmap);
+
+                        // Set the circular image to your ImageView
+                        profileImage.setImageBitmap(circularCameraBitmap);
+                        // Apply the circular background to the ImageView
+                        profileImage.setBackgroundResource(R.drawable.circular_background);
+
+                        // Convert the circular bitmap to Uri
+                        imageUri = getImageUri(getContext(), circularCameraBitmap);
+
+                        // Upload the circular image
+                        uploadPicture();
+                    }
+                    break;
+            }
         }
+    }
+
+    private Bitmap cropToCircle(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int size = Math.min(width, height);
+
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.BLACK); // You can set any color you want for the border
+        float radius = size / 2f;
+
+        canvas.drawCircle(radius, radius, radius, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, (size - width) / 2f, (size - height) / 2f, paint);
+
+        return output;
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Uri getImageUri(Context context, Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 
     private void uploadPicture() {
