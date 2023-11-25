@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -38,7 +39,7 @@ import android.widget.TextView;
 import android.Manifest;
 import android.widget.Toast;
 
-import com.github.dhaval2404.imagepicker.ImagePicker;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -56,6 +57,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -65,22 +67,14 @@ public class ProfileFragment extends Fragment {
     public static final String LAST_NAME = "last name";
     public static final String UTA_ID = "utaID";
     public static final String PROFESSION = "profession";
-
     private static final int REQUEST_CAMERA = 1;
-
     private static final int REQUEST_GALLERY = 2;
-
-    private String [] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     Button logout, editInfo, changePassword, saveChanges;
     ImageView profileImage;
     private Uri imageUri;
     EditText firstName, middleName, lastName, utaID, profession;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-
     FirebaseStorage storage;
-
     StorageReference storageReference;
 
     public ProfileFragment() {
@@ -112,7 +106,8 @@ public class ProfileFragment extends Fragment {
 
         saveChanges.setVisibility(View.GONE);
         loadUserDataFromFirestore();
-//        disableEditing();
+        loadPicture();
+
 
         logout.setOnClickListener(v -> {
             showLogoutConfirmationDialog();
@@ -164,16 +159,6 @@ public class ProfileFragment extends Fragment {
         builder.show();
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            imageUri = data.getData();
-//            profileImage.setImageURI(imageUri);
-//            uploadPicture();
-//        }
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -181,19 +166,19 @@ public class ProfileFragment extends Fragment {
             switch (requestCode) {
                 case REQUEST_GALLERY:
                     if (data != null && data.getData() != null) {
-                        // Get the selected image from gallery
+                        // Get selected image from gallery
                         imageUri = data.getData();
                         Bitmap galleryBitmap = getBitmapFromUri(imageUri);
 
-                        // Crop the bitmap to a circle
+                        // Crop bitmap to a circle
                         Bitmap circularGalleryBitmap = cropToCircle(galleryBitmap);
 
-                        // Set the circular image to your ImageView
+                        // Set the circular image to ImageView
                         profileImage.setImageBitmap(circularGalleryBitmap);
-                        // Apply the circular background to the ImageView
+                        // Apply circular background to ImageView
                         profileImage.setBackgroundResource(R.drawable.circular_background);
 
-                        // Upload the circular image
+                        // Upload circular image
                         uploadPicture();
                     }
                     break;
@@ -204,6 +189,7 @@ public class ProfileFragment extends Fragment {
                         Bitmap cameraBitmap = (Bitmap) extras.get("data");
 
                         // Crop the bitmap to a circle
+                        assert cameraBitmap != null;
                         Bitmap circularCameraBitmap = cropToCircle(cameraBitmap);
 
                         // Set the circular image to your ImageView
@@ -212,7 +198,7 @@ public class ProfileFragment extends Fragment {
                         profileImage.setBackgroundResource(R.drawable.circular_background);
 
                         // Convert the circular bitmap to Uri
-                        imageUri = getImageUri(getContext(), circularCameraBitmap);
+                        imageUri = getImageUri(requireContext(), circularCameraBitmap);
 
                         // Upload the circular image
                         uploadPicture();
@@ -231,7 +217,7 @@ public class ProfileFragment extends Fragment {
         Canvas canvas = new Canvas(output);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK); // You can set any color you want for the border
+        paint.setColor(Color.parseColor("#FDD017")); // You can set any color you want for the border
         float radius = size / 2f;
 
         canvas.drawCircle(radius, radius, radius, paint);
@@ -263,21 +249,27 @@ public class ProfileFragment extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currentUser != null;
         String userId = currentUser.getUid();
-        StorageReference profRef = storageReference.child("images/" + userId);
-        profRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getContext(), "Image uploaded.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Failed to upload.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        StorageReference profRef = storageReference.child("images/profile");
+        profRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> Toast.makeText(getContext(), "Image uploaded.",
+                Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to upload.",
+                        Toast.LENGTH_SHORT).show());
     }
+
+    private void loadPicture() {
+            StorageReference storageRef = storage.getReference().child("images/profile");
+
+            final long ONE_MEGABYTE = 1024 * 1024;
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    profileImage.setImageBitmap(cropToCircle(bmp));
+
+                }
+            }).addOnFailureListener(exception -> Toast.makeText(requireContext(), "No Such file or Path found!!", Toast.LENGTH_LONG).show());
+        }
 
     private void loadUserDataFromFirestore() {
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -296,8 +288,6 @@ public class ProfileFragment extends Fragment {
                         String id = documentSnapshot.getString(UTA_ID);
                         String prof = documentSnapshot.getString(PROFESSION);
 
-//                        enableEditing();
-                        // Set the retrieved data to EditText fields
                         firstName.setText(fName);
                         middleName.setText(mName);
                         lastName.setText(lName);
@@ -313,7 +303,7 @@ public class ProfileFragment extends Fragment {
 
     private void saveUserDataToFirestore() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null; //unnecessary since only logged in users can be in p_page
+        assert currentUser != null;
         String userId = currentUser.getUid();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

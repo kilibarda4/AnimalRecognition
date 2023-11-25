@@ -58,8 +58,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-
-    implementation ("com.github.dhaval2404:imagepicker:2.1")
+    implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
