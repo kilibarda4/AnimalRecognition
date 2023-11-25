@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -169,10 +170,10 @@ public class ProfileFragment extends Fragment {
                     if (data != null && data.getData() != null) {
                         // Get selected image from gallery
                         imageUri = data.getData();
-                        Bitmap galleryBitmap = getBitmapFromUri(imageUri);
+                        Bitmap galleryBitmap = ImageUtils.getBitmapFromUri(imageUri, requireContext());
 
                         // Crop bitmap to a circle
-                        Bitmap circularGalleryBitmap = cropToCircle(galleryBitmap);
+                        Bitmap circularGalleryBitmap = ImageUtils.cropToCircle(galleryBitmap);
 
                         // Set the circular image to ImageView
                         profileImage.setImageBitmap(circularGalleryBitmap);
@@ -191,7 +192,7 @@ public class ProfileFragment extends Fragment {
 
                         // Crop the bitmap to a circle
                         assert cameraBitmap != null;
-                        Bitmap circularCameraBitmap = cropToCircle(cameraBitmap);
+                        Bitmap circularCameraBitmap = ImageUtils.cropToCircle(cameraBitmap);
 
                         // Set the circular image to your ImageView
                         profileImage.setImageBitmap(circularCameraBitmap);
@@ -199,7 +200,7 @@ public class ProfileFragment extends Fragment {
                         profileImage.setBackgroundResource(R.drawable.circular_background);
 
                         // Convert the circular bitmap to Uri
-                        imageUri = getImageUri(requireContext(), circularCameraBitmap);
+                        imageUri = ImageUtils.getImageUri(requireContext(), circularCameraBitmap);
 
                         // Upload the circular image
                         uploadPicture();
@@ -207,42 +208,6 @@ public class ProfileFragment extends Fragment {
                     break;
             }
         }
-    }
-
-    private Bitmap cropToCircle(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int size = Math.min(width, height);
-
-        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.parseColor("#FDD017")); // You can set any color you want for the border
-        float radius = size / 2f;
-
-        canvas.drawCircle(radius, radius, radius, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, (size - width) / 2f, (size - height) / 2f, paint);
-
-        return output;
-    }
-
-    private Bitmap getBitmapFromUri(Uri uri) {
-        try {
-            return MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private Uri getImageUri(Context context, Bitmap bitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
     }
 
     private void uploadPicture() {
@@ -262,13 +227,10 @@ public class ProfileFragment extends Fragment {
             StorageReference storageRef = storage.getReference().child("images/profile");
 
             final long ONE_MEGABYTE = 1024 * 1024;
-            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    profileImage.setImageBitmap(cropToCircle(bmp));
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                profileImage.setImageBitmap(ImageUtils.cropToCircle(bmp));
 
-                }
             }).addOnFailureListener(exception -> Toast.makeText(requireContext(), "No Such file or Path found!!", Toast.LENGTH_LONG).show());
         }
 
