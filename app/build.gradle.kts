@@ -60,6 +60,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
 
+    implementation ("com.github.dhaval2404:imagepicker:2.1")
+
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
