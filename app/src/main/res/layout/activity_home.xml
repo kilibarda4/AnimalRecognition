@@ -27,7 +27,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/startRecordingBtn"
+            android:id="@+id/btnStartRecording"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
@@ -37,7 +37,7 @@
             android:textSize="28sp" />
 
         <Button
-            android:id="@+id/stopRecordingBtn"
+            android:id="@+id/btnStopRecording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
