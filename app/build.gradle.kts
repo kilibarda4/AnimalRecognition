@@ -20,6 +20,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        aaptOptions {
+            noCompress ("tflite")
+        }
+
     }
 
     buildTypes {
@@ -52,7 +56,7 @@ android {
 }
 
 dependencies {
-    //firebase
+    //firebase dependencies
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
@@ -60,8 +64,10 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.firebaseui:firebase-ui-storage:7.2.0")
     implementation("com.google.firebase:firebase-ml-modeldownloader")
-
+    //TensorFlow Lite dependencies
     implementation("org.tensorflow:tensorflow-lite:2.11.0")
+    implementation("org.tensorflow:tensorflow-lite-task-audio:0.4.4")
+    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.4")
 
     implementation ("com.github.dhaval2404:imagepicker:2.1")
 
