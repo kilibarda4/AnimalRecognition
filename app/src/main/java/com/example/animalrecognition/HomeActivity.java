@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,12 +35,15 @@ import org.tensorflow.lite.support.audio.TensorAudio;
 import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier;
 import org.tensorflow.lite.task.audio.classifier.Classifications;
+import org.tensorflow.lite.task.core.BaseOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -47,23 +52,20 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "HomeActivity";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private boolean permissionToRecordAccepted = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
     Button btnStartRecording, btnStopRecording;
     TextView result, specs;
 
+    private AudioViewModel audioViewModel;
 
-    BottomNavigationView bottomNavigationView;
+//    BottomNavigationView bottomNavigationView;
 
     String modelPath = "yamnet.tflite";
     float probabilityThreshold = 0.3f;
     AudioClassifier classifier;
+    AudioClassifier.AudioClassifierOptions options;
     private TensorAudio tensor;
     private AudioRecord record;
     private TimerTask timerTask;
-
-    private Interpreter interpreter;
-    private MediaRecorder recorder = null;
 
     ActivityHomeBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -74,8 +76,6 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(binding.getRoot());
-
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         //init firebase
         FirebaseApp.initializeApp(this);
@@ -112,68 +112,28 @@ public class HomeActivity extends AppCompatActivity {
         Bundle params = new Bundle();
         params.putString("startRCD", "startRecordingButton");
 
+        options = AudioClassifier.AudioClassifierOptions.builder()
+                .setBaseOptions(BaseOptions.builder().build())
+                .setMaxResults(1)
+                .build();
+
+        audioViewModel = new ViewModelProvider(this).get(AudioViewModel.class);
+
         btnStartRecording.setOnClickListener(view -> {
+
+            checkPermissionAndRecord(Manifest.permission.RECORD_AUDIO, REQUEST_RECORD_AUDIO_PERMISSION);
             mFirebaseAnalytics.logEvent("record_button_click", params);
-            try {
-                classifier = AudioClassifier.createFromFile(this, modelPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Could not load ML model, please restart the application.",
-                                Toast.LENGTH_SHORT)
-                                .show();
-            }
 
-            tensor = classifier.createInputTensorAudio();
-
-            TensorAudio.TensorAudioFormat format = classifier.getRequiredTensorAudioFormat();
-            String specsStr = "Number of channels: " + format.getChannels() + "\n"
-                    + "Sample rate: " + format.getSampleRate();
-            specs.setText(specsStr);
-
-            record = classifier.createAudioRecord();
-            record.startRecording();
-
-            timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    int numSamples = tensor.load(record);
-                    List<Classifications> output = classifier.classify(tensor);
-                    List<Category> finalOutput = new ArrayList<>();
-                    for(Classifications classifications : output) {
-                        for(Category category : classifications.getCategories()) {
-                            if(category.getScore() > probabilityThreshold
-                                    && category.getIndex() >= 69
-                                    && category.getIndex() <= 131) {
-                                finalOutput.add(category);
-                            }
-                        }
-                    }
-
-
-                    Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
-
-                    StringBuilder outputStr = new StringBuilder();
-                    for(Category category : finalOutput) {
-                        outputStr.append(category.getLabel()).append(": ")
-                                .append(category.getScore()).append("\n");
-                    }
-                    runOnUiThread(() -> {
-                        if (!finalOutput.isEmpty()) {
-                            result.setText(outputStr.toString());
-                        } else {
-                            result.setText(R.string.result);
-                        }
-                    });
-
-                }
-            };
-            new Timer().scheduleAtFixedRate(timerTask, 1, 500);
         });
 
         btnStopRecording.setOnClickListener((v -> {
-//            stopRecording();
-            timerTask.cancel();
-            record.stop();
+            //TODO: more robust solution is needed
+            try {
+                timerTask.cancel();
+                record.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }));
 
         binding.bottomNavigationView.setBackground(null);
@@ -186,35 +146,124 @@ public class HomeActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-            permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+    public void checkPermissionAndRecord(String permission, int requestCode)
+    {
+        if (ContextCompat.checkSelfPermission(HomeActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(HomeActivity.this, new String[] { permission }, requestCode);
         }
-        if (!permissionToRecordAccepted) {
-            showPermissionExplanationDialog();
+        else {
+            startAudioClassification();
         }
     }
 
-    private void showPermissionExplanationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Permission Required");
-        builder.setMessage("The application needs permission to access the microphone. Please grant the permission before proceeding.");
-        builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(HomeActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+    private void startAudioClassification() {
+        try {
+            classifier = AudioClassifier.createFromFileAndOptions(this, modelPath, options);
+            record = classifier.createAudioRecord();
+            tensor = classifier.createInputTensorAudio();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Could not load ML model, please restart the application.",
+                            Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+        if (record != null && tensor != null) {
+            record.startRecording();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    tensor.load(record);
+                    List<Classifications> output = classifier.classify(tensor);
+                    List<Category> finalOutput = new ArrayList<>();
+                    for (Classifications classifications : output) {
+                        for (Category category : classifications.getCategories()) {
+                            if (category.getScore() > probabilityThreshold
+                                    //classes 69 - 131 pertain to animals
+                                    && category.getIndex() >= 69
+                                    && category.getIndex() <= 131) {
+                                    finalOutput.add(category);
+                                    addLabel(category.getLabel());
+                            }
+                        }
+                    }
+                    Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
+
+                    StringBuilder outputStr = new StringBuilder();
+                    for (Category category : finalOutput) {
+                        outputStr.append(category.getLabel()).append(": ")
+                                .append(category.getScore()).append("\n");
+                    }
+                    runOnUiThread(() -> {
+                        if (!finalOutput.isEmpty()) {
+                            result.setText(outputStr.toString());
+                        } else {
+                            result.setText(R.string.result);
+                        }
+                    });
+                }
+            };
+            new Timer().scheduleAtFixedRate(timerTask, 1, 500);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startAudioClassification();
             }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(HomeActivity.this,
-                        "Permission Denied. The recording feature will not be available. You can change this in the settings",
-                        Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(HomeActivity.this, "To proceed, please provide microphone permissions in the settings", Toast.LENGTH_LONG) .show();
+                navigateToAppSettings();
             }
-        });
-        builder.show();
+        }
+    }
+
+    private void navigateToAppSettings() {
+        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, REQUEST_RECORD_AUDIO_PERMISSION);
+    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+//            permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//        }
+//        if (!permissionToRecordAccepted) {
+//            showPermissionExplanationDialog();
+//        }
+//    }
+
+//    private void showPermissionExplanationDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Permission Required");
+//        builder.setMessage("The application needs permission to access the microphone. Please grant the permission before proceeding.");
+//        builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                permissionToRecordAccepted = false;
+//                ActivityCompat.requestPermissions(HomeActivity.this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+//            }
+//        });
+//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Toast.makeText(HomeActivity.this,
+//                        "Permission Denied. The recording feature will not be available.",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        builder.show();
+//    }
+
+    private void addLabel(String label) {
+        audioViewModel.addOrUpdateLabel(label);
     }
 }
