@@ -20,14 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="@string/animalisten"
+            android:text="@string/animal_recognition"
             android:textAlignment="center"
             android:textColor="#FFCC00"
-            android:textSize="45sp"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/startRecordingBtn"
+            android:id="@+id/btnStartRecording"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
@@ -37,7 +37,7 @@
             android:textSize="28sp" />
 
         <Button
-            android:id="@+id/stopRecordingBtn"
+            android:id="@+id/btnStopRecording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
@@ -49,12 +49,24 @@
 
         <TextView
             android:id="@+id/result"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="@string/result"
+            android:layout_marginTop="25dp"
+            android:text="Result:"
             android:textColor="#6C5600"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/specs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="200dp"
+            android:text="Specs:"
+            android:textColor="#6C5600"
+            android:textSize="22sp" />
+
 
     </FrameLayout>
 

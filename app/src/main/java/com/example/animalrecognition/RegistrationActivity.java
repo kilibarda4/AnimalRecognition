@@ -24,7 +24,6 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText emailRegister, passwordRegister, retypePassword;
     private String email, password, password1;
     Button buttonRegister, goToLogin;
-    DBHelper DB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +36,24 @@ public class RegistrationActivity extends AppCompatActivity {
         retypePassword     = findViewById(R.id.retypePassword);
         buttonRegister     = findViewById(R.id.buttonRegister);
         goToLogin          = findViewById(R.id.goToLogin);
-        DB                 = new DBHelper(this);
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  email = emailRegister.getText().toString();
-                  password = passwordRegister.getText().toString();
-                  password1 = retypePassword.getText().toString();
-                  if(email.isEmpty() || password.isEmpty() || password1.isEmpty()) {
-                      Toast.makeText(RegistrationActivity.this, "All fields required", Toast.LENGTH_SHORT).show();
-                  }
-                  else if(!(password.equals(password1))) {
-                      Toast.makeText(RegistrationActivity.this, "Passwords must match", Toast.LENGTH_SHORT).show();
-                  } else {
-                      createAccount(email, password);
-                  }
-              }
-          });
-        goToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+
+        buttonRegister.setOnClickListener(view -> {
+            email = emailRegister.getText().toString();
+            password = passwordRegister.getText().toString();
+            password1 = retypePassword.getText().toString();
+            if(email.isEmpty() || password.isEmpty() || password1.isEmpty()) {
+                Toast.makeText(RegistrationActivity.this, "All fields required", Toast.LENGTH_SHORT).show();
             }
+            else if(!(password.equals(password1))) {
+                Toast.makeText(RegistrationActivity.this, "Passwords must match", Toast.LENGTH_SHORT).show();
+            } else {
+                createAccount(email, password);
+            }
+        });
+
+        goToLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         });
 
     }

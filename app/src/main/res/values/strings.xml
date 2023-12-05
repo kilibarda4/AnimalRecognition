@@ -20,19 +20,30 @@
     <string name="log_in1">Log in</string>
     <string name="create_account">Create new account</string>
     <string name="info">Info</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="info_view_deletable">INFO VIEW</string>
     <string name="profile_view_deletable">PROFILE VIEW</string>
     <string name="stats_view_deletable">STATS VIEW</string>
     <string name="home_fragment_delete">HOME FRAGMENT</string>
     <string name="model_info">YAMNet Machine Learning Model Information</string>
-    <string name="model_webpage">Click here to view the YAMNet documentation webpage</string>
     <string name="animalisten">AnimaListen</string>
+    <string name="model_webpage">Click here to view the YAMNet documentation webpage</string>
+    <string name="animal_recognition">Animal Recognition</string>
     <string name="email">Email</string>
     <string name="sign_out">Sign Out</string>
     <string name="confirmLogout">Are you sure you want to sign out?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password">Reset Password?</string>
+    <string name="emailHint">Email</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="uta_id">UTA ID</string>
+    <string name="profession">Profession</string>
+    <string name="edit_information">Edit Information</string>
+    <string name="change_password">Change Password</string>
+    <string name="save_changes">Save</string>
+    <string name="learn_more">Learn More</string>
+    <string name="discover_yamnet">discover YAMNet</string>
 </resources>

@@ -27,7 +27,7 @@
         android:layout_marginBottom="38dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/edittextbackground"
-        android:hint="@string/username1"
+        android:hint="@string/emailHint"
         android:inputType="textEmailAddress"
         android:maxWidth="480dp"
         android:maxLength="100"
