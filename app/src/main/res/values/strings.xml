@@ -27,7 +27,7 @@
     <string name="home_fragment_delete">HOME FRAGMENT</string>
     <string name="model_info">YAMNet Machine Learning Model Information</string>
     <string name="animalisten">AnimaListen</string>
-    <string name="model_webpage">Click here to view the YAMNet documentation webpage</string>
+    <string name="model_webpage">https://www.tensorflow.org/hub/tutorials/yamnet</string>
     <string name="animal_recognition">Animal Recognition</string>
     <string name="email">Email</string>
     <string name="sign_out">Sign Out</string>
@@ -48,4 +48,5 @@
     <string name="discover_yamnet">discover YAMNet</string>
     <string name="resultClassification">Result:</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="welcome_to_animalisten">Welcome to AnimaListen!</string>
 </resources>
