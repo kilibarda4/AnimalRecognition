@@ -1,14 +1,26 @@
 package com.example.animalrecognition;
 
-import androidx.lifecycle.ViewModel;
-
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import android.app.Application;
 import java.util.HashMap;
 
-public class AudioViewModel extends ViewModel {
-    public HashMap<String, Integer> audioStats = new HashMap<>();
-
+public class AudioViewModel extends AndroidViewModel {
+    private static AudioViewModel instance;
+    private HashMap<String, Integer> audioStats = new HashMap<>();
+    public AudioViewModel(@NonNull Application application) {
+        super(application);
+    }
+    public static synchronized AudioViewModel getInstance(Application application) {
+        if (instance == null) {
+            instance = new AudioViewModel(application);
+        }
+        return instance;
+    }
     public void addOrUpdateLabel(String label) {
-        // If the label exists, increment the count; otherwise, add the label with count 1
         audioStats.put(label, audioStats.getOrDefault(label, 0) + 1);
+    }
+    public HashMap<String, Integer> getAudioStats() {
+        return audioStats;
     }
 }
