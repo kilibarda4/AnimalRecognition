@@ -31,12 +31,16 @@ public class ImageUtils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, (size - width) / 2f, (size - height) / 2f, paint);
 
+        //free up associated memory
+        bitmap.recycle();
+        canvas = null;
+
         return output;
     }
 
     public static Uri getImageUri(Context context, Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
         return Uri.parse(path);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Animal Recognition</string>
+    <string name="app_name">Animal Know</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="stats">Stats</string>
     <string name="profile">Profile</string>

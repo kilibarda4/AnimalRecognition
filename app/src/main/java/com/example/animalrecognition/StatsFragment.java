@@ -20,34 +20,32 @@ import java.util.HashMap;
 import java.util.List;
 
 public class StatsFragment extends Fragment {
-    public StatsFragment() {
-        // Required empty public constructor
-    }
+    public StatsFragment() {}
 
     private AudioViewModel audioViewModel;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
 
-        audioViewModel = new ViewModelProvider(requireActivity()).get(AudioViewModel.class);
+        audioViewModel = AudioViewModel.getInstance(requireActivity().getApplication());
 
-        HashMap<String, Integer> audioStats = audioViewModel.audioStats;
+        HashMap<String, Integer> audioStats = audioViewModel.getAudioStats();
         List<DataEntry> data = new ArrayList<>();
 
 //        assert audioStats != null;
         for(String label : audioStats.keySet()) {
-            int count = audioStats.get(label);
-            data.add(new ValueDataEntry(label, count));
+                Integer count = audioStats.get(label);
+                data.add(new ValueDataEntry(label, count));
         }
-
         Pie pie = AnyChart.pie();
         pie.title("Top Classifications by Frequency of Occurrence");
         pie.title().margin(20);
-        pie.data(data);
+        pie.background(String.valueOf(true));
+        pie.background("#ffd700");
 
+        pie.data(data);
         AnyChartView anyChartView = view.findViewById(R.id.any_chart_view);
         anyChartView.setChart(pie);
 

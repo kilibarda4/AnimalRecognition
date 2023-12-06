@@ -133,7 +133,7 @@ public class ProfileFragment extends Fragment {
 
     private void choosePicture() {
         // Use an AlertDialog to let the user choose between gallery and camera
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Choose Picture Source");
         builder.setItems(new CharSequence[]{"Gallery", "Camera"}, new DialogInterface.OnClickListener() {
             @Override
@@ -175,6 +175,7 @@ public class ProfileFragment extends Fragment {
                         // Crop bitmap to a circle
                         Bitmap circularGalleryBitmap = ImageUtils.cropToCircle(galleryBitmap);
 
+                        galleryBitmap.recycle();
                         // Set the circular image to ImageView
                         profileImage.setImageBitmap(circularGalleryBitmap);
                         // Apply circular background to ImageView
@@ -193,7 +194,7 @@ public class ProfileFragment extends Fragment {
                         // Crop the bitmap to a circle
                         assert cameraBitmap != null;
                         Bitmap circularCameraBitmap = ImageUtils.cropToCircle(cameraBitmap);
-
+                        cameraBitmap.recycle();
                         // Set the circular image to your ImageView
                         profileImage.setImageBitmap(circularCameraBitmap);
                         // Apply the circular background to the ImageView
