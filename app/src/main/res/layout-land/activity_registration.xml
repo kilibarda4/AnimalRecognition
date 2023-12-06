@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="18dp"
+    android:background="#FFCC00"
+    android:orientation="vertical"
+    tools:context=".RegistrationActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textColor="#FFFFCC"
+        android:textSize="58sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="58dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:id="@+id/emailRegister"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email"
+        android:textSize="25sp"
+        android:textColorHint="#2B2929"
+        android:background="@drawable/edittextbackground"
+        android:layout_marginBottom="38dp"
+        android:paddingStart="28dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:id="@+id/passwordRegister"
+        android:inputType="textPassword"
+        android:hint="@string/password"
+        android:textSize="25sp"
+        android:textColorHint="#2B2929"
+        android:background="@drawable/edittextbackground"
+        android:layout_marginBottom="38dp"
+        android:paddingStart="28dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:id="@+id/retypePassword"
+        android:inputType="textPassword"
+        android:hint="@string/confirm_password"
+        android:textSize="25sp"
+        android:textColorHint="#2B2929"
+        android:background="@drawable/edittextbackground"
+        android:layout_marginBottom="38dp"
+        android:paddingStart="28dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:id="@+id/buttonRegister"
+        android:text="@string/register"
+        android:textSize="28sp"
+        android:textColor="#FFCC00"
+        android:backgroundTint="#FFFFCC"
+        android:layout_marginBottom="38dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:id="@+id/goToLogin"
+        android:text="@string/already_have_an_account"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:backgroundTint="#00000000"
+        android:layout_marginBottom="38dp"/>
+
+
+
+</LinearLayout>

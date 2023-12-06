@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDD017"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@drawable/default_profile_picture"
+        android:background="@drawable/circular_background"
+        android:scaleType="centerCrop" />
+
+
+    <EditText
+        android:id="@+id/firstNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/first_name"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        android:layout_below="@id/profileImageView"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/middleNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/middle_name"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        android:layout_below="@id/firstNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/lastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:layout_below="@id/middleNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/idEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/uta_id"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:layout_below="@id/lastNameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/professionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/profession"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:layout_below="@id/idEditText"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/professionEditText"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:text="@string/save_changes"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/editInfoButton"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_information"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:layout_below="@id/saveButton"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/changePasswordButton"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_password"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:layout_below="@id/editInfoButton"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_below="@+id/changePasswordButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFD600"
+        android:backgroundTint="#404040"
+        android:text="@string/sign_out" />
+
+</RelativeLayout>

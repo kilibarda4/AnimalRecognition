@@ -46,4 +46,6 @@
     <string name="save_changes">Save</string>
     <string name="learn_more">Learn More</string>
     <string name="discover_yamnet">discover YAMNet</string>
+    <string name="resultClassification">Result:</string>
+    <string name="profile_picture">Profile Picture</string>
 </resources>
