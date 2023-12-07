@@ -1,32 +1,27 @@
 package com.example.animalrecognition;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class StatsFragment extends Fragment {
-    public StatsFragment() {}
 
     private AudioViewModel audioViewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
 
         audioViewModel = AudioViewModel.getInstance(requireActivity().getApplication());
@@ -34,11 +29,16 @@ public class StatsFragment extends Fragment {
         HashMap<String, Integer> audioStats = audioViewModel.getAudioStats();
         List<DataEntry> data = new ArrayList<>();
 
-//        assert audioStats != null;
-        for(String label : audioStats.keySet()) {
+        if (audioStats != null && !audioStats.isEmpty()) {
+            for (String label : audioStats.keySet()) {
                 Integer count = audioStats.get(label);
                 data.add(new ValueDataEntry(label, count));
+            }
+        } else {
+            // If no recordings, add a placeholder entry with 0 count
+            data.add(new ValueDataEntry("No Recordings", 0));
         }
+
         Pie pie = AnyChart.pie();
         pie.title("Top Classifications by Frequency of Occurrence");
         pie.title().margin(20);
@@ -52,6 +52,7 @@ public class StatsFragment extends Fragment {
         return view;
     }
 }
+
 
 /*
         69 - 75 & 117 -> dog
