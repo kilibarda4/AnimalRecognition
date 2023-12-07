@@ -103,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void sendPasswordReset(String email) {
-        // [START send_password_reset]
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         auth.sendPasswordResetEmail(email)

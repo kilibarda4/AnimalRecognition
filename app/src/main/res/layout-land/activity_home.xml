@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frame_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#FFFFCC"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -16,17 +17,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFCC">
-
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/animal_recognition"
             android:textAlignment="center"
             android:textColor="#FFCC00"
@@ -41,10 +37,10 @@
             android:id="@+id/btnStartRecording"
             android:layout_width="wrap_content"
             android:layout_height="160dp"
-            android:layout_marginTop="40dp"
             android:backgroundTint="#FFCC00"
             android:text="@string/record"
             android:textSize="28sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnStopRecording"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -53,8 +49,8 @@
             android:id="@+id/btnStopRecording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="#FFCC00"
             android:text="@string/stop_recording"
             android:textColor="#FFFFFF"
@@ -79,8 +75,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

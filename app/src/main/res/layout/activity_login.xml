@@ -58,7 +58,7 @@
         android:layout_height="68dp"
         android:layout_marginBottom="38dp"
         android:backgroundTint="#FFFFCC"
-        android:maxWidth="300dp"
+        android:maxWidth="200dp"
         android:text="@string/log_in1"
         android:textColor="#FFCC00"
         android:textSize="28sp" />

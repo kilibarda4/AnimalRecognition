@@ -2,32 +2,14 @@ package com.example.animalrecognition;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,31 +17,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import android.Manifest;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
@@ -79,9 +55,7 @@ public class ProfileFragment extends Fragment {
     FirebaseStorage storage;
     StorageReference storageReference;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    public ProfileFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,8 +74,6 @@ public class ProfileFragment extends Fragment {
         saveChanges     = view.findViewById(R.id.saveButton);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        String userId = currentUser.getUid();
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -115,21 +87,28 @@ public class ProfileFragment extends Fragment {
             showLogoutConfirmationDialog();
         });
 
-        editInfo.setOnClickListener(view1 -> {
+        editInfo.setOnClickListener(v -> {
             enableEditing();
             saveChanges.setVisibility(View.VISIBLE);
+            editInfo.setVisibility(View.GONE);
         });
 
-        saveChanges.setOnClickListener(view1 -> {
+        saveChanges.setOnClickListener(v -> {
             saveUserDataToFirestore();
+            editInfo.setVisibility(View.VISIBLE);
         });
 
         profileImage.setOnClickListener(v -> {
             choosePicture();
         });
 
+        changePassword.setOnClickListener(v -> {
+            changeUserPassword(view, currentUser);
+        });
+
         return view;
     }
+
 
     private void choosePicture() {
         // Use an AlertDialog to let the user choose between gallery and camera
@@ -159,6 +138,69 @@ public class ProfileFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    private void changeUserPassword(View v, FirebaseUser currentUser) {
+        final EditText currentPasswordEditText = new EditText(v.getContext());
+        currentPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        currentPasswordEditText.setHint("Current Password");
+
+        final EditText passwordEditText = new EditText(v.getContext());
+        passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordEditText.setHint("New Password");
+
+        final EditText repeatPasswordEditText = new EditText(v.getContext());
+        repeatPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        repeatPasswordEditText.setHint("Retype Password");
+
+        LinearLayout layout = new LinearLayout(v.getContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(currentPasswordEditText);
+        layout.addView(passwordEditText);
+        layout.addView(repeatPasswordEditText);
+
+        new MaterialAlertDialogBuilder(v.getContext())
+                .setTitle("Change Password")
+                .setView(layout)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String currentPassword = currentPasswordEditText.getText().toString();
+                    String password = passwordEditText.getText().toString();
+                    String repeatPassword = repeatPasswordEditText.getText().toString();
+
+                    if (password.equals(repeatPassword)) {
+                        currentUser.updatePassword(password)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "User password updated.");
+                                        Toast.makeText(v.getContext(), "Password updated", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    if (e instanceof FirebaseAuthRecentLoginRequiredException) {
+                                        // Reauthenticate the user
+                                        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), currentPassword);
+                                        currentUser.reauthenticate(credential)
+                                                .addOnCompleteListener(task -> {
+                                                    if (task.isSuccessful()) {
+                                                        // Retry password update
+                                                        currentUser.updatePassword(password)
+                                                                .addOnCompleteListener(task1 -> {
+                                                                    if (task1.isSuccessful()) {
+                                                                        Log.d(TAG, "User password updated after reauthentication.");
+                                                                        Toast.makeText(v.getContext(), "Password updated", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+                                    }
+                                });
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .show();
     }
 
     @Override
@@ -267,7 +309,6 @@ public class ProfileFragment extends Fragment {
 
     private void saveUserDataToFirestore() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
         String userId = currentUser.getUid();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -305,7 +346,7 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                             // Sign out the user from Firebase (if needed)
                             FirebaseAuth.getInstance().signOut();
-
+                            AudioViewModel.destroyInstance();
                             // Navigate back to the LoginActivity
                             Intent intent = new Intent(getActivity(), LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -317,6 +358,7 @@ public class ProfileFragment extends Fragment {
                         })
                         .show();
     }
+
 
     private void enableEditing() {
         // Enable editing for the EditText fields

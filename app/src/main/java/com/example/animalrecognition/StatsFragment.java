@@ -14,6 +14,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.google.protobuf.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,17 +34,23 @@ public class StatsFragment extends Fragment {
 
         HashMap<String, Integer> audioStats = audioViewModel.getAudioStats();
         List<DataEntry> data = new ArrayList<>();
+        ValueDataEntry noData = new ValueDataEntry("No data yet", 1);
 
-//        assert audioStats != null;
-        for(String label : audioStats.keySet()) {
+        if (audioStats.isEmpty()) {
+            data.add(noData);
+        } else {
+            for(String label : audioStats.keySet()) {
                 Integer count = audioStats.get(label);
                 data.add(new ValueDataEntry(label, count));
+                data.remove(noData);
+            }
         }
-        Pie pie = AnyChart.pie();
+        Pie pie = AnyChart.pie3d();
         pie.title("Top Classifications by Frequency of Occurrence");
-        pie.title().margin(20);
+        pie.title().margin(25);
+        pie.title().fontSize(22);
         pie.background(String.valueOf(true));
-        pie.background("#ffd700");
+        pie.background("#ffffcc");
 
         pie.data(data);
         AnyChartView anyChartView = view.findViewById(R.id.any_chart_view);

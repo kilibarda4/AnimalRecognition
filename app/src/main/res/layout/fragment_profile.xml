@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDD017"
@@ -27,7 +28,8 @@
         android:textColor="@color/black"
         android:inputType="textPersonName"
         android:layout_below="@id/profileImageView"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/middleNameEditText"
@@ -37,7 +39,8 @@
         android:textColor="@color/black"
         android:inputType="textPersonName"
         android:layout_below="@id/firstNameEditText"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/lastNameEditText"
@@ -47,7 +50,8 @@
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:layout_below="@id/middleNameEditText"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/idEditText"
@@ -57,7 +61,8 @@
         android:inputType="number"
         android:textColor="@color/black"
         android:layout_below="@id/lastNameEditText"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/professionEditText"
@@ -67,7 +72,8 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:layout_below="@id/idEditText"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/saveButton"

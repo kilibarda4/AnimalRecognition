@@ -16,15 +16,11 @@ import java.util.List;
 
 public class InfoFragment extends Fragment {
 
-    public InfoFragment() {
-        // Required empty public constructor
-    }
+    public InfoFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_info, container, false);
 
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
@@ -43,7 +39,6 @@ public class InfoFragment extends Fragment {
     }
 
     public void openWebPage(View view) {
-        // Handle the click event, e.g., open a web browser with the URL
         String url = getString(R.string.model_webpage); // Get the URL from resources
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
