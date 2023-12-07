@@ -16,7 +16,7 @@ public class AudioViewModelTest {
     private Application application;
     private AudioViewModel audioViewModel;
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         application = Mockito.mock(Application.class);
         //get a new instance before each test
         AudioViewModel.destroyInstance();
@@ -24,7 +24,7 @@ public class AudioViewModelTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AudioViewModel.destroyInstance();
     }
 
