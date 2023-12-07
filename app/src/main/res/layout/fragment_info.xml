@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFCC"
     tools:context=".InfoFragment">
 
     <TextView
-        android:id="@+id/infoTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/model_info"
+        android:layout_gravity="center|top"
         android:textAlignment="center"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="@+id/viewPager"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp"
+        android:textColor="#FFCC00"
+        android:layout_marginTop="40dp"
+        android:textStyle="bold"
+        android:text="@string/model_info" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_marginTop="-270dp"
+        android:layout_height="match_parent"/>
 
     <TextView
-        android:id="@+id/linkYamnet"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:clickable="true"
-        android:minHeight="48dp"
-        android:onClick="openWebPage"
-        android:text="@string/model_webpage"
+        android:layout_gravity="center"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="80dp"
+        android:text="YAMNet is Google's neural network for recognizing over 500 sound classes in short audio clips. Trained on AudioSet, it's a versatile tool for tasks like acoustic scene analysis." />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/learnMoreButton"
+        android:layout_width="273dp"
+        android:layout_height="61dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="50dp"
+        android:text="@string/learn_more2"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:textSize="28sp"
+        android:backgroundTint="#FFCC00"
+        />
+
+
+
+</FrameLayout>

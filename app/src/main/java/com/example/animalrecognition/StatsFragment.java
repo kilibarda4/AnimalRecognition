@@ -47,8 +47,8 @@ public class StatsFragment extends Fragment {
         }
         Pie pie = AnyChart.pie3d();
         pie.title("Top Classifications by Frequency of Occurrence");
-        pie.title().margin(25);
-        pie.title().fontSize(22);
+        pie.title().margin(20);
+        pie.title().fontSize(30);
         pie.background(String.valueOf(true));
         pie.background("#ffffcc");
 
@@ -59,6 +59,7 @@ public class StatsFragment extends Fragment {
         return view;
     }
 }
+
 
 /*
         69 - 75 & 117 -> dog
