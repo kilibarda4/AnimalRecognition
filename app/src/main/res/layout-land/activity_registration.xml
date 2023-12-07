@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFCC00" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp"
+        tools:context=".RegistrationActivity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/sign_up"
+            android:textColor="#FFFFCC"
+            android:textSize="58sp"
+            android:textStyle="bold"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/emailRegister"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/edittextbackground"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="28dp"
+            android:textColorHint="#2B2929"
+            android:textSize="25sp"
+            tools:ignore="Autofill,RtlSymmetry,VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/passwordRegister"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/edittextbackground"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingStart="28dp"
+            android:textColorHint="#2B2929"
+            android:textSize="25sp"
+            tools:ignore="Autofill,RtlSymmetry,VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/retypePassword"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/edittextbackground"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingStart="28dp"
+            android:textColorHint="#2B2929"
+            android:textSize="25sp"
+            tools:ignore="Autofill,RtlSymmetry,VisualLintTextFieldSize" />
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_marginBottom="38dp"
+            android:backgroundTint="#FFFFCC"
+            android:text="@string/register"
+            android:textColor="#FFCC00"
+            android:textSize="28sp"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/goToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:layout_marginBottom="38dp"
+            android:backgroundTint="#00000000"
+            android:text="@string/already_have_an_account"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="VisualLintButtonSize" />
+
+    </LinearLayout>
+    </ScrollView>

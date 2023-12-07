@@ -29,7 +29,8 @@
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingStart="28dp" />
+        android:paddingStart="28dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:layout_width="match_parent"
@@ -41,7 +42,8 @@
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingStart="28dp"/>
+        android:paddingStart="28dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:layout_width="match_parent"
@@ -53,7 +55,8 @@
         android:textColorHint="#2B2929"
         android:background="@drawable/edittextbackground"
         android:layout_marginBottom="38dp"
-        android:paddingStart="28dp"/>
+        android:paddingStart="28dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:layout_width="match_parent"
@@ -63,7 +66,8 @@
         android:textSize="28sp"
         android:textColor="#FFCC00"
         android:backgroundTint="#FFFFCC"
-        android:layout_marginBottom="38dp"/>
+        android:layout_marginBottom="38dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:layout_width="match_parent"
@@ -74,7 +78,8 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:backgroundTint="#00000000"
-        android:layout_marginBottom="38dp"/>
+        android:layout_marginBottom="38dp"
+        tools:ignore="VisualLintButtonSize" />
 
 
 

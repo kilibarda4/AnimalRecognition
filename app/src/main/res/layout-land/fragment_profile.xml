@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFCC00" >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="#FDD017"
     android:padding="16dp">
 
@@ -11,69 +16,76 @@
         android:id="@+id/profileImageView"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:src="@drawable/default_profile_picture"
         android:background="@drawable/circular_background"
-        android:scaleType="centerCrop" />
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile_picture"
+        tools:ignore="KeyboardInaccessibleWidget,SpeakableTextPresentCheck"
+        android:contentDescription="@string/profile_picture" />
 
 
     <EditText
         android:id="@+id/firstNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/first_name"
-        android:textColor="@color/black"
-        android:inputType="textPersonName"
         android:layout_below="@id/profileImageView"
         android:layout_marginTop="16dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        android:hint="@string/first_name"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColor="@color/black"
+        tools:ignore="Autofill,VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/middleNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/middle_name"
-        android:textColor="@color/black"
-        android:inputType="textPersonName"
         android:layout_below="@id/firstNameEditText"
-        android:layout_marginTop="8dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        android:layout_marginTop="16dp"
+        android:hint="@string/middle_name"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColor="@color/black"
+        tools:ignore="Autofill,VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/lastNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/middleNameEditText"
+        android:layout_marginTop="16dp"
         android:hint="@string/last_name"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:textColor="@color/black"
-        android:layout_below="@id/middleNameEditText"
-        android:layout_marginTop="8dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        tools:ignore="Autofill,VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/idEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/lastNameEditText"
+        android:layout_marginTop="16dp"
         android:hint="@string/uta_id"
         android:inputType="number"
+        android:minHeight="48dp"
         android:textColor="@color/black"
-        android:layout_below="@id/lastNameEditText"
-        android:layout_marginTop="8dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        tools:ignore="Autofill,VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/professionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/idEditText"
+        android:layout_marginTop="16dp"
         android:hint="@string/profession"
         android:inputType="text"
+        android:minHeight="48dp"
         android:textColor="@color/black"
-        android:layout_below="@id/idEditText"
-        android:layout_marginTop="8dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        tools:ignore="Autofill,VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/saveButton"
@@ -119,4 +131,5 @@
         android:backgroundTint="#404040"
         android:text="@string/sign_out" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

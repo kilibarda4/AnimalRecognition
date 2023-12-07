@@ -1,68 +1,44 @@
 package com.example.animalrecognition;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-
-import android.media.AudioRecord;
-
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.TextView;
-import android.Manifest;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.animalrecognition.databinding.ActivityHomeBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import org.tensorflow.lite.support.audio.TensorAudio;
-import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.audio.classifier.AudioClassifier;
-import org.tensorflow.lite.task.audio.classifier.Classifications;
 import org.tensorflow.lite.task.core.BaseOptions;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "HomeActivity";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     Button btnStartRecording, btnStopRecording;
-    TextView result, specs;
+    TextView result;
 
     private AudioClassifierHelper audioClassifierHelper;
     private AudioViewModel audioViewModel;
 
     String modelPath = "yamnet.tflite";
-    float probabilityThreshold = 0.3f;
     AudioClassifier classifier;
     AudioClassifier.AudioClassifierOptions options;
-    private TensorAudio tensor;
-    private AudioRecord record;
-    private TimerTask timerTask;
 
     ActivityHomeBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -81,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         btnStartRecording = findViewById(R.id.btnStartRecording);
         btnStopRecording = findViewById(R.id.btnStopRecording);
         result = findViewById(R.id.result);
-        specs = findViewById(R.id.specs);
+//        specs = findViewById(R.id.specs);
 
         AtomicBoolean home = new AtomicBoolean(false);
         //navigate using the nav bar
@@ -125,7 +101,6 @@ public class HomeActivity extends AppCompatActivity {
 
             audioClassifierHelper.checkPermissionAndRecord(HomeActivity.this, HomeActivity.this,
                     Manifest.permission.RECORD_AUDIO, REQUEST_RECORD_AUDIO_PERMISSION, modelPath, options);
-//            checkPermissionAndRecord(Manifest.permission.RECORD_AUDIO, REQUEST_RECORD_AUDIO_PERMISSION);
             mFirebaseAnalytics.logEvent("record_button_click", params);
 
         });
@@ -135,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.bottomNavigationView.setBackground(null);
     }
 
-    private void replaceFragment(Fragment fragment) {
+    protected void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
@@ -183,76 +158,3 @@ public class HomeActivity extends AppCompatActivity {
         audioClassifierHelper.clearTextView();
     }
 }
-
-//    public void checkPermissionAndRecord(String permission, int requestCode)
-//    {
-//        if (ContextCompat.checkSelfPermission(HomeActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
-//            // Requesting the permission
-//            ActivityCompat.requestPermissions(HomeActivity.this, new String[] { permission }, requestCode);
-//        }
-//        else {
-//            startAudioClassification();
-//        }
-//    }
-
-//    private void startAudioClassification() {
-//        try {
-//            classifier = AudioClassifier.createFromFileAndOptions(this, modelPath, options);
-//            record = classifier.createAudioRecord();
-//            tensor = classifier.createInputTensorAudio();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, "Could not load ML model, please restart the application.",
-//                            Toast.LENGTH_SHORT)
-//                    .show();
-//        }
-//
-//        if (record != null && tensor != null) {
-//            record.startRecording();
-//            timerTask = new TimerTask() {
-//                @Override
-//                public void run() {
-//                    tensor.load(record);
-//                    List<Classifications> output = classifier.classify(tensor);
-//                    HashMap<String, Integer> pieChartResults = new HashMap<>();
-//                    List<Category> finalOutput = new ArrayList<>();
-//                    for (Classifications classifications : output) {
-//                        for (Category category : classifications.getCategories()) {
-//                            if (category.getScore() > probabilityThreshold
-//                                    //classes 69 - 131 pertain to animals
-//                                    && category.getIndex() >= 69
-//                                    && category.getIndex() <= 131) {
-//                                    finalOutput.add(category);
-//                                    pieChartResults.put(category.getLabel(), pieChartResults.getOrDefault(category.getLabel(), 0) + 1);
-//                            }
-//                        }
-//                    }
-//                    audioViewModel.addOrUpdateLabel(pieChartResults);
-//                    Collections.sort(finalOutput, (o1, o2) -> (int) (o1.getScore() - o2.getScore()));
-//
-//                    StringBuilder outputStr = new StringBuilder();
-//                    for (Category category : finalOutput) {
-//                        outputStr.append(category.getLabel()).append(": ")
-//                                .append(category.getScore()).append("\n");
-//                    }
-//                    runOnUiThread(() -> {
-//                        if (!finalOutput.isEmpty()) {
-//                            result.setText(outputStr.toString());
-//                        } else {
-//                            result.setText(R.string.result);
-//                        }
-//                    });
-//                }
-//            };
-//            new Timer().scheduleAtFixedRate(timerTask, 1, 500);
-//        }
-//    }
-
-//    private void stopRecording() {
-//        try {
-//            timerTask.cancel();
-//            record.stop();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }

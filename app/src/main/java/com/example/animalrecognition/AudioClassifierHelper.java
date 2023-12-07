@@ -21,7 +21,6 @@ import org.tensorflow.lite.task.audio.classifier.Classifications;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
