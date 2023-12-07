@@ -59,27 +59,3 @@ public class StatsFragment extends Fragment {
         return view;
     }
 }
-
-
-/*
-        69 - 75 & 117 -> dog
-        76 - 80 -> cat
-        82 - 84 -> horse
-        86 - 87 -> cow
-        88 - 89 -> pig
-        90 - 92 -> goat/sheep
-        93 - 102 -> duck/chicken/fowl
-        103 - 105 -> wild cats
-        106 - 116 -> bird
-        118 - 119 -> rodents
-        121 - 126 -> flying insects
-        127 - 128 -> frog
-        129 - 130 -> snake
-        131 -> whale
-
-        public String getLabel(int index) {
-            if index >= 69 && <= 75 || index == 117 return dog
-            if index >= 76 && <= 80 return cat;
-            if index >= 82 && <= 84 return horse
-        }
-        */
