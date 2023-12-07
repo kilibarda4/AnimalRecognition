@@ -11,24 +11,41 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:textAlignment="center"
-        android:textSize="22sp"
-        android:layout_marginTop="25dp"
+        android:textSize="30sp"
+        android:textColor="#FFCC00"
+        android:layout_marginTop="40dp"
+        android:textStyle="bold"
         android:text="@string/model_info" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
+        android:layout_marginTop="-270dp"
         android:layout_height="match_parent"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="center"
         android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="80dp"
+        android:text="YAMNet is Google's neural network for recognizing over 500 sound classes in short audio clips. Trained on AudioSet, it's a versatile tool for tasks like acoustic scene analysis." />
+
+    <Button
+        android:id="@+id/learnMoreButton"
+        android:layout_width="273dp"
+        android:layout_height="61dp"
+        android:layout_gravity="bottom|center"
         android:layout_marginBottom="50dp"
-        android:text="@string/model_webpage"
-        android:autoLink="web"
-        android:clickable="true"
-        android:onClick="openWebPage"/>
+        android:text="@string/learn_more2"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:textSize="28sp"
+        android:backgroundTint="#FFCC00"
+        />
+
+
 
 </FrameLayout>
